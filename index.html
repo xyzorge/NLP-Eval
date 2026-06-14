@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">NLP Eval — Machine Translation Quality Evaluation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <img id="logo" src="logo.png" alt="logo" class="logo-img"
+                 onerror="this.style.display='none'">
+            <span class="logo-text">NLP&nbsp;Eval</span>
+        </div>
+
+        <div class="header-controls">
+            <button id="lang-toggle" class="lang-toggle" aria-label="Switch language">
+                <span class="lang-opt" data-lang="ru">RU</span>
+                <span class="lang-opt" data-lang="en">EN</span>
+            </button>
+
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                <span class="theme-icon sun">☀︎</span>
+                <span class="theme-track"><span class="theme-thumb"></span></span>
+                <span class="theme-icon moon">☾</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="title" data-i18n="heading">Machine Translation Quality Evaluation</h1>
+        <p class="subtitle" data-i18n="subtitle" data-i18n-html="true">
+            Comparing two translations against a reference using the&nbsp;<b>BLEU</b> metric
+        </p>
+
+        <div class="grid">
+            <div class="field">
+                <label for="original" data-i18n="label_original">Source</label>
+                <textarea id="original" data-i18n-ph="ph_original"
+                          placeholder="Source text…"></textarea>
+            </div>
+
+            <div class="field">
+                <label for="reference" data-i18n="label_reference">Reference translation (Human)</label>
+                <textarea id="reference" data-i18n-ph="ph_reference"
+                          placeholder="Human-made translation…"></textarea>
+            </div>
+
+            <div class="field">
+                <label for="candidate1" data-i18n="label_cand1">Translation 1 (Google)</label>
+                <textarea id="candidate1" data-i18n-ph="ph_cand1"
+                          placeholder="Machine translation #1…"></textarea>
+            </div>
+
+            <div class="field">
+                <label for="candidate2" data-i18n="label_cand2">Translation 2 (DeepL)</label>
+                <textarea id="candidate2" data-i18n-ph="ph_cand2"
+                          placeholder="Machine translation #2…"></textarea>
+            </div>
+        </div>
+
+        <button id="calculate" class="btn-calculate">
+            <span class="btn-label" data-i18n="btn_calculate">Calculate BLEU Score</span>
+            <span class="spinner" hidden></span>
+        </button>
+
+        <p id="error" class="error" hidden></p>
+
+        <section id="results" class="results" hidden>
+            <h2 class="results-title" data-i18n="results_title">Results</h2>
+
+            <div class="result-card" id="card1">
+                <div class="result-head">
+                    <span class="result-name" data-i18n="label_cand1">Translation 1 (Google)</span>
+                    <span class="result-score" id="score1">0.0000</span>
+                </div>
+                <div class="bar"><div class="bar-fill" id="bar1"></div></div>
+            </div>
+
+            <div class="result-card" id="card2">
+                <div class="result-head">
+                    <span class="result-name" data-i18n="label_cand2">Translation 2 (DeepL)</span>
+                    <span class="result-score" id="score2">0.0000</span>
+                </div>
+                <div class="bar"><div class="bar-fill" id="bar2"></div></div>
+            </div>
+
+            <p class="verdict" id="verdict"></p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <span data-i18n="footer">Beta · BLEU (NLTK)</span>
+        <span class="watermark" id="watermark">Copyright © 2026 Ilya Fedoseev. All Rights Reserved.</span>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
