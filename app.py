@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """NLP Eval — BLEU metric calculation for machine translation evaluation.
 
-Run with: uvicorn app:app --reload
+Run with: uvicorn app:app --reload  (or: python app.py)
 """
+
+import re
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,19 +12,16 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-import nltk
-from nltk.tokenize import word_tokenize
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 
 
-for _pkg in ("punkt", "punkt_tab"):
-    try:
-        nltk.data.find(f"tokenizers/{_pkg}")
-    except LookupError:
-        try:
-            nltk.download(_pkg, quiet=True)
-        except Exception:
-            pass
+# Simple regex tokenizer: words + standalone punctuation.
+# Works for English, Russian, and most languages without needing NLTK data.
+_TOKEN_RE = re.compile(r"\w+|[^\w\s]", re.UNICODE)
+
+
+def tokenize(text: str) -> list[str]:
+    return _TOKEN_RE.findall(text.lower())
 
 
 class TranslationRequest(BaseModel):
@@ -41,8 +40,8 @@ class TranslationResponse(BaseModel):
 def calculate_bleu(reference_text: str, candidate_text: str) -> float:
     """Compute BLEU score for a candidate against a reference.
     Smoothing prevents zero scores on short sentences. Returns a value in [0, 1]."""
-    reference_tokens = word_tokenize(reference_text.lower())
-    candidate_tokens = word_tokenize(candidate_text.lower())
+    reference_tokens = tokenize(reference_text)
+    candidate_tokens = tokenize(candidate_text)
 
     if not reference_tokens or not candidate_tokens:
         return 0.0
@@ -91,3 +90,8 @@ def index() -> FileResponse:
 
 
 app.mount("/", StaticFiles(directory="."), name="static")
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app:app", host="127.0.0.1", port=8000, reload=True)

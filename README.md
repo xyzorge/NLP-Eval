@@ -34,7 +34,7 @@ uvicorn app:app --reload
 
 Then open http://127.0.0.1:8000.
 
-First run pulls down NLTK's `punkt` tokenizer automatically. Takes a second.
+Tokenization is done with a small regex (no NLTK data downloads required), so the first run just starts up.
 
 ## API
 
