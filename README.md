@@ -1,6 +1,6 @@
 # NLP Eval — BLEU Score for MT
 
-Small web app I threw together to compare two machine translations against a human reference using BLEU. Python on the backend (FastAPI + NLTK), plain HTML/CSS/JS on the front. No build step, no framework, nothing fancy.
+Small web app I threw together to compare two machine translations against a human reference using BLEU. Python on the backend (FastAPI, BLEU implemented from scratch — no NLTK or other heavyweight deps), plain HTML/CSS/JS on the front. No build step, no framework, nothing fancy.
 
 Portfolio / learning project, still kinda beta.
 
@@ -16,7 +16,7 @@ Portfolio / learning project, still kinda beta.
 
 ```
 .
-├── app.py             # FastAPI + NLTK BLEU
+├── app.py             # FastAPI + BLEU implementation
 ├── index.html         # the page
 ├── style.css          # styles, CSS vars for theming
 ├── script.js          # theme + lang switch, fetch, render
@@ -63,7 +63,7 @@ Response:
 
 ## About BLEU (short version)
 
-BLEU = Bilingual Evaluation Understudy. It looks at n-gram overlap (1 to 4 grams) between the candidate and the reference and spits out a number from 0 to 1. Closer to 1 = closer to the reference. We use `SmoothingFunction.method1` so a short sentence that misses one 4-gram doesn't collapse to zero.
+BLEU = Bilingual Evaluation Understudy. It looks at n-gram overlap (1 to 4 grams) between the candidate and the reference and spits out a number from 0 to 1. Closer to 1 = closer to the reference. We apply smoothing (the same logic as NLTK's `method1`) so a short sentence that misses one 4-gram doesn't collapse to zero.
 
 Heads up: BLEU is an approximate metric. It's fine for benchmarking on large corpora, pretty noisy on individual short sentences. Don't read too much into a single score.
 
